@@ -50,4 +50,4 @@ app/api/stream/route.ts currently returns a simple echo.
 4. Use Gpt 4.1 Model.
 5. Make the Chat to onboard the user, change his preferences and conversate about some information.(Side effects, db not needed, mock some data)
 
-## When done ping rory by email, and we'll set up a review call to go through what you've built. 
+## When done ping rory by email (rory@askvinny.co.uk), and we'll set up a review call to go through what you've built. 

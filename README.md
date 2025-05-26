@@ -1,53 +1,62 @@
 
-# Chatbox Test App
+# Coding Assessment: Chatbox Enhancement
 
-> Minimal Next.js chat widget + streaming API starter
+## 🎯 Your Task
+
+Your mission is to transform this chatbot into an extraordinary conversational agent. Here's what you need to do:
+
+1. **Onboarding Questions**: Develop a feature to ask users three onboarding questions:
+   - What is their favorite country?
+   - What is their favorite continent food?
+   - What is their favorite destination?
+
+2. **General Purpose Chatbot**: Post-onboarding, the chatbot should be capable of answering questions related to world geography.
+
+3. **Creativity and Architecture**: We are looking for innovative solutions, creative flair, and robust architectural decisions. This task should take at least 1 hour, but feel free to invest more time to enhance the chatbot's capabilities.
+
+## 📋 Additional Notes
+
+- Utilize environment variables from `.env.example` (OpenAI Keys for this project).
+- Implement a streaming chatbot for the chat rendered in `page.tsx` using the `/api/stream` endpoint.
+- Leverage OpenAI npm packages, adhere to best practices, and incorporate your own design and functionality ideas.
+- Use the GPT 4.1 model.
+- Ensure the chat can onboard users, allow them to change preferences, and engage in informative conversations. (No database needed; mock data is sufficient.)
 
 ## ✨ Current Features
 
-- **Next.js** (App Router) running on **Node 22.15.0**
+- **Next.js** (App Router) running on **Node 22.15.0**
 - **TypeScript** with `strict` mode enabled
-- **Tailwind CSS** for rapid UI styling
-- Fixed bottom‑right chatbox component
+- **Tailwind CSS** for rapid UI styling
+- Fixed bottom-right chatbox component
 - `/api/stream` **Edge** route that streams an echo response ⚡️
-- Stub for plugging an **OpenAI Assistant** to add side‑effects (analytics, logging, etc.)
+- Stub for integrating an **OpenAI Assistant** to add side-effects (analytics, logging, etc.)
 
+## 🚀 How to Get Started
 
-## 🚀 How to get started
+1. Clone the repository:
+   ```bash
+   git clone git@github.com:AskVinny/chatboxtest.git
+   cd chatboxtest
+   ```
 
-git clone git@github.com:AskVinny/chatboxtest.git
-cd chatboxtest
+2. Ensure the correct Node version:
+   ```bash
+   nvm install 22.15.0
+   nvm use
+   ```
 
-ensure correct Node version
+3. Install dependencies and run the development server:
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-`nvm install 22.15.0`
-`nvm use`
-`npm install`
-`npm run dev`
+## 🧑‍💻 Best Practice Guidance
 
-🧑‍💻 Best Practice Guidance
+1. Use strict TypeScript with ESLint (`typescript-eslint`).
+2. Opt for Edge runtime to reduce latency on the streaming route.
+3. Manage environment variables via `env.example` (ignored by Git).
 
-1. Strict TypeScript + ESLint (typescript-eslint)
-2. Edge runtime for lower latency on the streaming route
-3. Environment variables managed via env.example (ignored by Git)
+## 📧 Completion
 
-🤖 OpenAI Assistant integration
-
-app/api/stream/route.ts currently returns a simple echo. 
-
-# Your Task
-- Your task is to turn this chatbot into the most awesome possible chatbot it can be. 
-- We want to ask the user three questions to onboard them to then chatbot.  What is their favourite country, their continent food and their favourite desitination.
-- After these questions are answered the chatbot should be a general purpose chatbot that can answer questions on world geography.
-- We want to see creativity, flare and strong architecural decisions. 
-- We expect that this should take not less than 1 hour, anything more is up to you.  
-
-
-## Additional Notes
-1. Use the env vars from the .env.example(OpenAi Keys for this project)
-2. Create a streaming chatbot for the chat that we are rendering in page.tsx(use the stream route endpoint to communicate)
-3. Utilize OpenAi npm Packages, best practices and with your own ideas in terms of designs and functionality.
-4. Use Gpt 4.1 Model.
-5. Make the Chat to onboard the user, change his preferences and conversate about some information.(Side effects, db not needed, mock some data)
-
-## When done ping rory by email (rory@askvinny.co.uk), and we'll set up a review call to go through what you've built. 
+Once you've completed the task, please email Rory at [rory@askvinny.co.uk] to schedule a review call and discuss your implementation.

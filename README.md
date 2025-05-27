@@ -7,7 +7,7 @@ Your mission is to transform this chatbot into an extraordinary conversational a
 
 1. **Onboarding Questions**: Develop a feature to ask users three onboarding questions:
    - What is their favorite country?
-   - What is their favorite continent food?
+   - What is their favorite continent?
    - What is their favorite destination?
 
 2. **General Purpose Chatbot**: Post-onboarding, the chatbot should be capable of answering questions related to world geography.

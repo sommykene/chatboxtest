@@ -6,9 +6,6 @@ export const user1: User = {
   preferences: {
     theme: "light",
   },
-  favoriteCountry: "",
-  favoriteContinent: "",
-  favoriteDestination: "",
 };
 
 export const user2: User = {
@@ -17,9 +14,6 @@ export const user2: User = {
   preferences: {
     theme: "dark",
   },
-  favoriteCountry: "",
-  favoriteContinent: "",
-  favoriteDestination: "",
 };
 
 export const user3: User = {
@@ -28,7 +22,4 @@ export const user3: User = {
   preferences: {
     theme: "light",
   },
-  favoriteCountry: "",
-  favoriteContinent: "",
-  favoriteDestination: "",
 };

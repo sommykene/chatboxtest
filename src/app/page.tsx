@@ -1,8 +1,4 @@
-import Home from "./Home";
-
-export const metadata = {
-  title: "ChatBot Extraordinaire",
-};
+import Home from "./screens/Home";
 
 export default function Page() {
   return <Home />;

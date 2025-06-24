@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import { useChatbot } from "../hooks/useChatbot";
 import "./chatbox.css";
@@ -34,7 +35,7 @@ export default function Chatbox() {
     requestAnimationFrame(() => {
       inputRef.current?.focus();
     });
-    
+
     setMessages((prev) => [
       ...prev.slice(0, -1),
       { role: "assistant", content: reply },

@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const assistant = await openai.beta.assistants.create({
     name: "World Geography Helper",
     instructions:
-      "You are a helpful assistant that answers questions about world geography. Provide accurate and concise information.",
+      "You are a helpful assistant that answers questions about world geography. Provide accurate and concise information in a nice format",
     model: "gpt-4.1",
     tools: [
       {
@@ -117,14 +117,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Run failed" });
     }
 
-    // 5. Get latest assistant reply
     const messages = await openai.beta.threads.messages.list(thread_id);
     const assistantMessage = messages.data.find(
       (msg) => msg.role === "assistant"
     );
 
     const reply =
-      assistantMessage?.content[0]?.text?.value ?? "No reply from assistant";
+      assistantMessage?.content[0] && "text" in assistantMessage?.content[0]
+        ? assistantMessage.content[0].text.value
+        : "No reply from assistant";
 
     return NextResponse.json({
       threadId: thread_id,

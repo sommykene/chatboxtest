@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useChatbot } from "../hooks/useChatbot";
 import "./chatbox.css";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function Chatbox() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -9,6 +11,7 @@ export default function Chatbox() {
   );
   const [input, setInput] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { sendMessage } = useChatbot();
 
@@ -28,7 +31,10 @@ export default function Chatbox() {
     const reply = await sendMessage(userInput);
     if (!reply) return;
     setIsLoading(false);
-
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
+    
     setMessages((prev) => [
       ...prev.slice(0, -1),
       { role: "assistant", content: reply },
@@ -57,18 +63,24 @@ export default function Chatbox() {
             );
           }
           return (
-            <div
-              key={i}
-              className={`flex ${
-                isUser ? "justify-end" : "justify-start"
-              } gap-2`}>
+            <>
               <div
-                className={`max-w-[70%] p-2 rounded-lg ${
-                  isUser ? "bg-accent text-white" : "bg-accent/10"
-                }`}>
-                {m.content}
+                key={i}
+                className={`flex ${
+                  isUser ? "justify-end" : "justify-start"
+                } gap-2`}>
+                <div
+                  className={`max-w-[70%] p-2 rounded-lg ${
+                    isUser ? "bg-accent text-white" : "bg-accent/10"
+                  }`}>
+                  {isUser ? (
+                    <p>{m.content}</p>
+                  ) : (
+                    <Markdown remarkPlugins={[remarkGfm]}>{m.content}</Markdown>
+                  )}
+                </div>
               </div>
-            </div>
+            </>
           );
         })}
         <div ref={endRef} />
@@ -77,6 +89,7 @@ export default function Chatbox() {
         <input
           disabled={isLoading}
           value={input}
+          ref={inputRef}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
           className="flex-1 rounded-md border px-2 py-1 text-sm bg-transparent outline-none"

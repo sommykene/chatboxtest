@@ -6,9 +6,9 @@ export const user1: User = {
   preferences: {
     theme: "light",
   },
-  favoriteCountry: "France",
-  favoriteContinent: "Europe",
-  favoriteDestination: "Paris",
+  favoriteCountry: "",
+  favoriteContinent: "",
+  favoriteDestination: "",
 };
 
 export const user2: User = {
@@ -17,9 +17,9 @@ export const user2: User = {
   preferences: {
     theme: "dark",
   },
-  favoriteCountry: "Japan",
-  favoriteContinent: "Asia",
-  favoriteDestination: "Tokyo",
+  favoriteCountry: "",
+  favoriteContinent: "",
+  favoriteDestination: "",
 };
 
 export const user3: User = {
@@ -28,7 +28,7 @@ export const user3: User = {
   preferences: {
     theme: "light",
   },
-  favoriteCountry: "Brazil",
-  favoriteContinent: "South America",
-  favoriteDestination: "Rio de Janeiro",
+  favoriteCountry: "",
+  favoriteContinent: "",
+  favoriteDestination: "",
 };

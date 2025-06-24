@@ -1,5 +1,5 @@
 import { user1, user2, user3 } from "./mocks/mocks";
-import { useUser } from "./hooks/useUser";
+import { useUser } from "./providers/UserProvider";
 
 export const Welcome = () => {
   const { signin } = useUser();
@@ -13,13 +13,13 @@ export const Welcome = () => {
         need.
       </p>
       <div className="flex gap-4">
-        <button onClick={() => signin(user1)} className="button">
+        <button onClick={() => signin(user1.id)} className="button">
           Login in as {user1.name}
         </button>
-        <button onClick={() => signin(user2)} className="button">
+        <button onClick={() => signin(user2.id)} className="button">
           Login in as {user2.name}
         </button>
-        <button onClick={() => signin(user3)} className="button">
+        <button onClick={() => signin(user3.id)} className="button">
           Login in as {user3.name}
         </button>
       </div>

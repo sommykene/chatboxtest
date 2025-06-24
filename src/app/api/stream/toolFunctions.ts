@@ -22,3 +22,21 @@ export const getOnboardingDataPrompt = {
     required: ["favoriteCountry", "favoriteContinent", "favoriteDestination"],
   },
 };
+
+export const changeThemePrompt = {
+  name: "change_theme",
+  description: "Change the theme of the application",
+  strict: true,
+  parameters: {
+    type: "object",
+    properties: {
+      theme: {
+        type: "string",
+        enum: ["light", "dark"],
+        description: "Theme to change to",
+      },
+    },
+    additionalProperties: false,
+    required: ["theme"],
+  },
+};

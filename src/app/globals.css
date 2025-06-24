@@ -46,15 +46,13 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --white: #000;
-    --primary: #ff5d8f; /* Accent color in light theme becomes primary in dark theme */
-    --accent: #e63946; /* Primary color in light theme becomes accent in dark theme */
-    --background: #2b2b2b; /* Dark background color for better contrast */
-    --text: #f5f5f5; /* Light text color for readability */
-    --secondary: #8a3d55; /* Keep the secondary color for vibrancy */
-  }
+.dark {
+  --white: #000;
+  --primary: #ff5d8f; /* Accent color in light theme becomes primary in dark theme */
+  --accent: #e63946; /* Primary color in light theme becomes accent in dark theme */
+  --background: #2b2b2b; /* Dark background color for better contrast */
+  --text: #f5f5f5; /* Light text color for readability */
+  --secondary: #8a3d55; /* Keep the secondary color for vibrancy */
 }
 
 html {

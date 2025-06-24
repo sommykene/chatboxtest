@@ -1,4 +1,4 @@
-import { useUser } from "./useUser";
+import { useUser } from "../providers/UserProvider";
 
 export const useChatbot = () => {
   const { updateUser, user } = useUser();
@@ -11,8 +11,27 @@ export const useChatbot = () => {
     });
 
     const data = await res.json();
-    updateUser({ threadId: data.threadId });
-    return data.reply; // { threadId, reply }
+
+    if (data.userTheme) {
+      document.documentElement.classList.toggle(
+        "dark",
+        data.userTheme === "dark"
+      );
+    }
+    updateUser({
+      threadId: data.threadId,
+      favoriteContinent:
+        data.onboardingData?.favoriteContinent ?? user?.favoriteContinent,
+      favoriteCountry:
+        data.onboardingData?.favoriteCountry ?? user?.favoriteCountry,
+      favoriteDestination:
+        data.onboardingData?.favoriteDestination ?? user?.favoriteDestination,
+      preferences: {
+        theme: data.userTheme ?? user?.preferences?.theme ?? "light",
+      },
+    });
+
+    return data.reply;
   };
 
   return {

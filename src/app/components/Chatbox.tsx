@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useChatbot } from "../hooks/useChatbot";
+import "./chatbox.css";
 
 export default function Chatbox() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -40,6 +41,21 @@ export default function Chatbox() {
       <div className="flex-1 p-3 overflow-y-auto space-y-2 text-sm">
         {messages.map((m, i) => {
           const isUser = m.role === "user";
+          if (m.content === "...") {
+            return (
+              <div
+                key={i}
+                className={`flex ${
+                  isUser ? "justify-end" : "justify-start"
+                } gap-2`}>
+                <div className={`max-w-[70%] p-2 rounded-lg bg-accent/10`}>
+                  <p key="loading" className="loading">
+                    .<span></span>
+                  </p>
+                </div>
+              </div>
+            );
+          }
           return (
             <div
               key={i}
@@ -48,9 +64,7 @@ export default function Chatbox() {
               } gap-2`}>
               <div
                 className={`max-w-[70%] p-2 rounded-lg ${
-                  isUser
-                    ? "bg-accent text-white"
-                    : "bg-accent/10 dark:bg-gray-700 dark:text-white"
+                  isUser ? "bg-accent text-white" : "bg-accent/10"
                 }`}>
                 {m.content}
               </div>
@@ -61,6 +75,7 @@ export default function Chatbox() {
       </div>
       <div className="p-3 flex gap-2">
         <input
+          disabled={isLoading}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
@@ -68,9 +83,10 @@ export default function Chatbox() {
           placeholder="Type a message"
         />
         <button
+          disabled={isLoading}
           onClick={send}
-          className="px-3 py-1 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-700">
-          Send
+          className="px-3 py-1 rounded-md bg-accent text-white text-sm hover:bg-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          {isLoading ? "Replying..." : "Send"}
         </button>
       </div>
     </div>

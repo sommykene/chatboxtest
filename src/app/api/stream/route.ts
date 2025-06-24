@@ -1,22 +1,137 @@
-export const runtime = 'edge'
+import { getOnboardingDataPrompt } from "@/app/getOnboardingDataPrompt";
+import { NextResponse } from "next/server";
+import OpenAI from "openai";
+export const runtime = "edge";
 
 export async function POST(req: Request) {
-  const { message } = await req.json()
-  const encoder = new TextEncoder()
+  const { threadId, message } = await req.json();
 
-  const stream = new ReadableStream({
-    async start(controller) {
-        console.log(`Received message: ${message}`)
-      const text = `Echo: ${message}`
-      for (const ch of text) {
-        controller.enqueue(encoder.encode(ch))
-        await new Promise(r => setTimeout(r, 50))
-      }
-      controller.close()
+  const onboardingData: {
+    favoriteCountry: string;
+    favoriteContinent: string;
+    favoriteDestination: string;
+  } | null = null;
+
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_KEY });
+
+  const assistant = await openai.beta.assistants.create({
+    name: "World Geography Helper",
+    instructions: `
+    You are a helpful assistant that answers questions about world geography. Provide accurate and concise information.`,
+    model: "gpt-4.1",
+    tools: [
+      {
+        type: "function",
+        function: getOnboardingDataPrompt,
+      },
+    ],
+  });
+
+  try {
+    let thread_id = threadId;
+    if (!thread_id) {
+      const thread = await openai.beta.threads.create();
+      thread_id = thread.id;
     }
-  })
 
-  return new Response(stream, {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8' }
-  })
+    const existingRuns = await openai.beta.threads.runs.list(thread_id, {
+      limit: 1,
+    });
+
+    const latestRun = existingRuns.data[0];
+
+    if (
+      latestRun &&
+      latestRun.status !== "completed" &&
+      latestRun.status !== "failed"
+    ) {
+      return NextResponse.json({
+        error: "There is already an active run on this thread.",
+      });
+    }
+
+    await openai.beta.threads.messages.create(thread_id, {
+      role: "user",
+      content: `Ask me:
+        1. What is their favorite country?
+        2. What is their favorite continent?
+        3. What is their favorite destination?
+        Use the get_onboarding_data tool to gather this information.`,
+    });
+
+    await openai.beta.threads.messages.create(thread_id, {
+      role: "user",
+      content: message,
+    });
+
+    const run = await openai.beta.threads.runs.create(thread_id, {
+      assistant_id: assistant.id,
+    });
+
+    let runStatus = run.status;
+    while (runStatus !== "completed" && runStatus !== "failed") {
+      const updatedRun = await openai.beta.threads.runs.retrieve(run.id, {
+        thread_id,
+      });
+      //   console.log(runStatus);
+      runStatus = updatedRun.status;
+
+      if (runStatus === "requires_action") {
+        const toolOutputs =
+          updatedRun?.required_action?.submit_tool_outputs.tool_calls.map(
+            (tool) => {
+              console.log("Tool Call:", tool);
+              if (tool.function.name === "get_onboarding_data") {
+                const data = JSON.parse(tool.function.arguments ?? "{}");
+                console.log("Tool Data:", data);
+                return {
+                  id: tool.id,
+                  favoriteCountry: data.favoriteCountry,
+                  favoriteContinent: data.favoriteContinent,
+                  favoriteDestination: data.favoriteDestination,
+                };
+              }
+            }
+          );
+
+        console.log("Tool Outputs:", toolOutputs);
+
+        await openai.beta.threads.runs.submitToolOutputs(updatedRun.id, {
+          thread_id,
+          tool_outputs: [
+            {
+              tool_call_id: toolOutputs?.[0]?.id,
+              output: JSON.stringify({
+                favoriteCountry: toolOutputs?.[0]?.favoriteCountry,
+                favoriteContinent: toolOutputs?.[0]?.favoriteContinent,
+                favoriteDestination: toolOutputs?.[0]?.favoriteDestination,
+              }),
+            },
+          ],
+        });
+
+        break;
+      }
+
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+
+    if (runStatus === "failed") {
+      return NextResponse.json({ error: "Run failed" });
+    }
+
+    // 5. Get latest assistant reply
+    const messages = await openai.beta.threads.messages.list(thread_id);
+    const assistantMessage = messages.data.find(
+      (msg) => msg.role === "assistant"
+    );
+
+    const reply =
+      assistantMessage?.content[0]?.text?.value ?? "No reply from assistant";
+
+    return NextResponse.json({ threadId: thread_id, reply, onboardingData });
+  } catch (error: any) {
+    console.error("OpenAI error:", error);
+    return NextResponse.json({ error: "Internal server error" });
+  }
 }

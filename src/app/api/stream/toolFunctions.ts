@@ -1,3 +1,5 @@
+// These were for assistant generation and tool calls.
+
 export const getOnboardingDataPrompt = {
   name: "get_onboarding_data",
   description: "Find out users country preferences",

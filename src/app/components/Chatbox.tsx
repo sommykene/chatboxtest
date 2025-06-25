@@ -64,24 +64,22 @@ export default function Chatbox() {
             );
           }
           return (
-            <>
+            <div
+              key={i}
+              className={`flex ${
+                isUser ? "justify-end" : "justify-start"
+              } gap-2`}>
               <div
-                key={i}
-                className={`flex ${
-                  isUser ? "justify-end" : "justify-start"
-                } gap-2`}>
-                <div
-                  className={`max-w-[70%] p-2 rounded-lg ${
-                    isUser ? "bg-accent text-white" : "bg-accent/10"
-                  }`}>
-                  {isUser ? (
-                    <p>{m.content}</p>
-                  ) : (
-                    <Markdown remarkPlugins={[remarkGfm]}>{m.content}</Markdown>
-                  )}
-                </div>
+                className={`max-w-[70%] p-2 rounded-lg ${
+                  isUser ? "bg-accent text-white" : "bg-accent/10"
+                }`}>
+                {isUser ? (
+                  <p>{m.content}</p>
+                ) : (
+                  <Markdown remarkPlugins={[remarkGfm]}>{m.content}</Markdown>
+                )}
               </div>
-            </>
+            </div>
           );
         })}
         <div ref={endRef} />

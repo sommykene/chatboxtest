@@ -12,6 +12,10 @@ export const useChatbot = () => {
 
     const data = await res.json();
 
+    if (data.error) {
+      return "Hey, something went wrong. Please try again later.";
+    }
+
     if (data.userTheme) {
       document.documentElement.classList.toggle(
         "dark",
